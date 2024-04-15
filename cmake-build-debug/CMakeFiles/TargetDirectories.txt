@@ -1,0 +1,3 @@
+/Users/jonathanmascarenhas/CLionProjects/sfs_code/cmake-build-debug/CMakeFiles/sfs_code.dir
+/Users/jonathanmascarenhas/CLionProjects/sfs_code/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/jonathanmascarenhas/CLionProjects/sfs_code/cmake-build-debug/CMakeFiles/rebuild_cache.dir

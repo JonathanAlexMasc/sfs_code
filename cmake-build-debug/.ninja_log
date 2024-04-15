@@ -1,0 +1,5 @@
+# ninja log v5
+0	214	1713037001345132920	CMakeFiles/sfs_code.dir/bitmap.c.o	7be8411c77206b19
+0	214	1713037001345132253	CMakeFiles/sfs_code.dir/driver.c.o	1c3a8cb3c5b5f8d6
+0	214	1713037001345130503	CMakeFiles/sfs_code.dir/example.c.o	c3de86191e0b0878
+214	348	1713037001478204658	sfs_code	cf9b97978356ca39
