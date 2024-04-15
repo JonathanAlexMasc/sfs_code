@@ -70,8 +70,8 @@ build CMakeFiles/sfs_code.dir/example.c.o: C_COMPILER__sfs_code_unscanned_Debug 
   OBJECT_DIR = CMakeFiles/sfs_code.dir
   OBJECT_FILE_DIR = CMakeFiles/sfs_code.dir
 
-build CMakeFiles/sfs_code.dir/cp_from_rd.c.o: C_COMPILER__sfs_code_unscanned_Debug /Users/jonathanmascarenhas/CLionProjects/sfs_code/cp_from_rd.c || cmake_object_order_depends_target_sfs_code
-  DEP_FILE = CMakeFiles/sfs_code.dir/cp_from_rd.c.o.d
+build CMakeFiles/sfs_code.dir/dils.c.o: C_COMPILER__sfs_code_unscanned_Debug /Users/jonathanmascarenhas/CLionProjects/sfs_code/dils.c || cmake_object_order_depends_target_sfs_code
+  DEP_FILE = CMakeFiles/sfs_code.dir/dils.c.o.d
   FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -fcolor-diagnostics
   INCLUDES = -I/Users/jonathanmascarenhas/CLionProjects/sfs_code/.
   OBJECT_DIR = CMakeFiles/sfs_code.dir
@@ -85,7 +85,7 @@ build CMakeFiles/sfs_code.dir/cp_from_rd.c.o: C_COMPILER__sfs_code_unscanned_Deb
 #############################################
 # Link the executable sfs_code
 
-build sfs_code: C_EXECUTABLE_LINKER__sfs_code_Debug CMakeFiles/sfs_code.dir/bitmap.c.o CMakeFiles/sfs_code.dir/driver.c.o CMakeFiles/sfs_code.dir/example.c.o CMakeFiles/sfs_code.dir/cp_from_rd.c.o
+build sfs_code: C_EXECUTABLE_LINKER__sfs_code_Debug CMakeFiles/sfs_code.dir/bitmap.c.o CMakeFiles/sfs_code.dir/driver.c.o CMakeFiles/sfs_code.dir/example.c.o CMakeFiles/sfs_code.dir/dils.c.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk
   OBJECT_DIR = CMakeFiles/sfs_code.dir
   POST_BUILD = :

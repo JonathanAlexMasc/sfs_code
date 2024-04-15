@@ -1,12 +1,11 @@
-//
-// Created by Jonathan Mascarenhas on 4/15/24.
-//
-
 #include <driver.h>
 #include <sfs_superblock.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include "sfs_inode.h"
+#include "sfs_dir.h"
 
 int main()
 {
@@ -14,7 +13,7 @@ int main()
     char raw_superblock[128];
 
     /* Create a pointer to the buffer so that we can treat it as a
-       superblock struct. The superblock struct is smaller than a block,
+       superblock struct. The superb ;;lock struct is smaller than a block,
        so we have to do it this way so that the buffer that we read
        blocks into is big enough to hold a complete block. Otherwise the
        driver_read function will overwrite something that should not be
@@ -24,8 +23,9 @@ int main()
     /* open the disk image and get it ready to read/write blocks */
     driver_attach_disk_image("initrd", 128);
 
-    int block_number;
-    int found_superblock = 0;
+    /* CHANGE THE FOLLOWING CODE SO THAT IT SEARCHES FOR THE SUPERBLOCK */
+    uint32_t block_number;
+    uint32_t found_superblock = 0;
 
     /* Search for the superblock in blocks 0 to 10 */
     for (block_number = 0; block_number <= 10; block_number++)
@@ -47,6 +47,18 @@ int main()
     {
         printf("Superblock is not found in blocks 0 to 10.\n");
     }
+
+    /* Read the block containing directory entries */
+    sfs_dirent *directory = (sfs_dirent *)malloc(128);
+    driver_read(directory, block_number);
+
+    /* Iterate through directory entries and print file names */
+    for (int j = 0; j < (super->block_size) / sizeof(sfs_dirent); j++)
+    {
+        printf("File: %s\n", directory[j].name);
+    }
+
+    free(directory);
 
     /* close the disk image */
     driver_detach_disk_image();
