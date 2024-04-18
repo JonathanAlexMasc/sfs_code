@@ -7,6 +7,15 @@
 #include "sfs_inode.h"
 #include "sfs_dir.h"
 
+void print_sfs_dirent(const sfs_dirent *dirent, u_int64_t num_blocks);
+
+void print_sfs_dirent(const sfs_dirent *dirent, u_int64_t num_blocks) {
+    for (size_t i = 0; i < num_blocks; ++i) {
+        const sfs_dirent *current_block = &dirent[i]; // Pointer to the current block
+        printf("%s\n", current_block->name);
+    }
+}
+
 int main()
 {
     /* declare a buffer that is the same size as a filesystem block */
@@ -37,7 +46,7 @@ int main()
         if (super->fsmagic == VMLARIX_SFS_MAGIC &&
             !strcmp(super->fstypestr, VMLARIX_SFS_TYPESTR))
         {
-            printf("Superblock found at block %d!\n", block_number);
+            //printf("Superblock found at block %d!\n", block_number);
             found_superblock = 1;
             break; // Exit loop once superblock is found
         }
@@ -46,19 +55,100 @@ int main()
     if (!found_superblock)
     {
         printf("Superblock is not found in blocks 0 to 10.\n");
+        return 1;
     }
 
-    /* Read the block containing directory entries */
-    sfs_dirent *directory = (sfs_dirent *)malloc(128);
-    driver_read(directory, block_number);
+    // super is the superblock that we have found...
 
-    /* Iterate through directory entries and print file names */
-    for (int j = 0; j < (super->block_size) / sizeof(sfs_dirent); j++)
-    {
-        printf("File: %s\n", directory[j].name);
+    /* Calculate the block number of the first block of the inode table */
+    uint32_t inode_table_index = super->inodes;
+    uint32_t num_inodes = super->num_inodes;
+    //printf("Inode Table Index: %d \n", inode_table_index);
+    //printf("Number of inode blocks: %d \n", super->num_inode_blocks);
+
+//    for (int k = 0; k < num_inodes/2; k++) {
+//        // get first two inodes
+//    }
+
+    /* Read the first block of the inode table */
+    char first_inode_block[128];
+    sfs_inode_t *inode = (sfs_inode_t *)first_inode_block;
+    driver_read(inode, inode_table_index);
+
+    /* Print out the contents of the first inode block
+    printf("Printing contents of the first inode block:\n");
+    for (int i = 0; i < 2; i++) {
+        printf("Inode %d:\n", i);
+        printf("Owner: %d\n", inode[i].owner);
+        printf("Group: %d\n", inode[i].group);
+        printf("Creation Time: %d\n", inode[i].ctime);
+        printf("Modification Time: %d\n", inode[i].mtime);
+        printf("Access Time: %d\n", inode[i].atime);
+        printf("Permissions: %d\n", inode[i].perm);
+        printf("File Type: %d\n", inode[i].type);
+        printf("Reference Count: %d\n", inode[i].refcount);
+        printf("Size: %lu\n", inode[i].size);
+        printf("Direct Blocks:\n");
+        for (int j = 0; j < NUM_DIRECT; j++) {
+            printf("  %u\n", inode[i].direct[j]);
+        }
+        // Print pointers to direct, indirect, double indirect, and triple indirect blocks as needed
+    }
+    */
+
+    // get first block of direct array
+    uint64_t num_blocks = inode[0].size;
+    char first_blk_storage[128];
+
+    // Assuming driver_read function reads the data correctly into first_blk_storage.
+    uint32_t direct_arr_first_blk_location = inode[0].direct[0];
+    sfs_dirent *dirent = (sfs_dirent *)first_blk_storage;
+    driver_read(dirent, direct_arr_first_blk_location);
+
+    for (size_t j = 0; j < 4; ++j) {
+        const sfs_dirent *current_block = &dirent[j]; // Pointer to the current block
+        printf("%s\n", current_block->name);
     }
 
-    free(directory);
+    // read in inode2
+    sfs_inode_t *inode2 = (sfs_inode_t *)(first_inode_block + sizeof(sfs_inode_t));
+    driver_read(inode2, inode_table_index);
+
+    /* Print out the contents of the first inode block
+    printf("Printing contents of the first inode block:\n");
+    for (int i = 0; i < 2; i++) {
+        printf("Inode %d:\n", i);
+        printf("Owner: %d\n", inode[i].owner);
+        printf("Group: %d\n", inode[i].group);
+        printf("Creation Time: %d\n", inode[i].ctime);
+        printf("Modification Time: %d\n", inode[i].mtime);
+        printf("Access Time: %d\n", inode[i].atime);
+        printf("Permissions: %d\n", inode[i].perm);
+        printf("File Type: %d\n", inode[i].type);
+        printf("Reference Count: %d\n", inode[i].refcount);
+        printf("Size: %lu\n", inode[i].size);
+        printf("Direct Blocks:\n");
+        for (int j = 0; j < NUM_DIRECT; j++) {
+            printf("  %u\n", inode[i].direct[j]);
+        }
+        // Print pointers to direct, indirect, double indirect, and triple indirect blocks as needed
+    }
+    */
+
+    // get first block of direct array
+    num_blocks = inode[1].size;
+    char second_blk_storage[128];
+
+    // Assuming driver_read function reads the data correctly into first_blk_storage.
+    direct_arr_first_blk_location = inode2[1].direct[0];
+    dirent = (sfs_dirent *)second_blk_storage;
+    driver_read(dirent, direct_arr_first_blk_location);
+
+    for (size_t j = 0; j < 4; ++j) {
+        const sfs_dirent *current_block = &dirent[j]; // Pointer to the current block
+        printf("%s\n", current_block->name);
+    }
+
 
     /* close the disk image */
     driver_detach_disk_image();
