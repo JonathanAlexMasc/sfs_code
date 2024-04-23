@@ -84,6 +84,14 @@ typedef struct sfs_inode{
   uint32_t tindirect;
 }sfs_inode_t;
 
+/*
+ * to get permissions, use a bitmask for eg. 100000000, do bitwise and, see if
+ * set, and track if so. Then shift the number right.
+ *
+ * for time - take a look at asctime
+ */
+
+
 
 /* Max file sizes
 

@@ -14,4 +14,5 @@ add_executable(sfs_code
         sfs_dir.h
         sfs_inode.h
         sfs_superblock.h
-        cp_from_rd.c)
+        dils.c
+)
